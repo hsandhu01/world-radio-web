@@ -28,9 +28,14 @@
     <button onclick="playStation()">Play</button>
     <button onclick="stopStation()">Stop</button>
 
+    <h2>Favorites</h2>
+    <ul id="favorites"></ul>
+    <button onclick="addToFavorites()">Add to Favorites</button>
+
     <script>
         const backendUrl = 'https://maevas-world-radio.herokuapp.com'; // Update with your Heroku URL
         let currentUrl = '';
+        let favorites = {};
 
         function updateStations() {
             const country = document.getElementById('country').value;
@@ -64,6 +69,33 @@
         function stopStation() {
             fetch(`${backendUrl}/stop`, { method: 'POST' });
         }
+
+        function addToFavorites() {
+            const stationsList = document.getElementById('stations');
+            const selectedStation = Array.from(stationsList.children).find(li => li.style.backgroundColor === 'gray');
+            if (selectedStation && !favorites[selectedStation.textContent]) {
+                favorites[selectedStation.textContent] = currentUrl;
+                updateFavoritesList();
+            }
+        }
+
+        function updateFavoritesList() {
+            const favoritesList = document.getElementById('favorites');
+            favoritesList.innerHTML = '';
+            for (const [name, url] of Object.entries(favorites)) {
+                const li = document.createElement('li');
+                li.textContent = name;
+                li.onclick = () => { currentUrl = url; playStation(); };
+                favoritesList.appendChild(li);
+            }
+        }
+
+        document.getElementById('stations').addEventListener('click', function(e) {
+            if (e.target && e.target.nodeName === 'LI') {
+                Array.from(this.children).forEach(li => li.style.backgroundColor = '');
+                e.target.style.backgroundColor = 'gray';
+            }
+        });
     </script>
 </body>
 </html>
