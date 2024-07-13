@@ -9,7 +9,29 @@
 <body>
     <h1>Maeva's World Radio</h1>
     <label for="country">Country:</label>
-    <input type="text" id="country" name="country">
+    <select id="country" name="country">
+        <option value="United States">United States</option>
+        <option value="United Kingdom">United Kingdom</option>
+        <option value="Canada">Canada</option>
+        <option value="Australia">Australia</option>
+        <option value="Germany">Germany</option>
+        <option value="France">France</option>
+        <option value="Italy">Italy</option>
+        <option value="Spain">Spain</option>
+        <option value="Netherlands">Netherlands</option>
+        <option value="Russia">Russia</option>
+        <option value="India">India</option>
+        <option value="China">China</option>
+        <option value="Japan">Japan</option>
+        <option value="South Korea">South Korea</option>
+        <option value="Brazil">Brazil</option>
+        <option value="Mexico">Mexico</option>
+        <option value="South Africa">South Africa</option>
+        <option value="Argentina">Argentina</option>
+        <option value="Sweden">Sweden</option>
+        <option value="Norway">Norway</option>
+        <option value="Denmark">Denmark</option>
+    </select>
 
     <label for="genre">Genre:</label>
     <select id="genre" name="genre">
@@ -17,7 +39,21 @@
         <option value="rock">rock</option>
         <option value="jazz">jazz</option>
         <option value="classical">classical</option>
-        <!-- Add other genres as needed -->
+        <option value="electronic">electronic</option>
+        <option value="hiphop">hiphop</option>
+        <option value="country">country</option>
+        <option value="reggae">reggae</option>
+        <option value="blues">blues</option>
+        <option value="metal">metal</option>
+        <option value="disco">disco</option>
+        <option value="folk">folk</option>
+        <option value="funk">funk</option>
+        <option value="gospel">gospel</option>
+        <option value="latin">latin</option>
+        <option value="soul">soul</option>
+        <option value="techno">techno</option>
+        <option value="trance">trance</option>
+        <option value="world">world</option>
     </select>
 
     <button onclick="updateStations()">Update Stations</button>
@@ -96,6 +132,23 @@
                 e.target.style.backgroundColor = 'gray';
             }
         });
+
+        // Pre-populate genres
+        document.addEventListener('DOMContentLoaded', function() {
+            const genreSelect = document.getElementById('genre');
+            COMMON_GENRES.forEach(genre => {
+                const option = document.createElement('option');
+                option.value = genre;
+                option.text = genre;
+                genreSelect.add(option);
+            });
+        });
+
+        const COMMON_GENRES = [
+            "pop", "rock", "jazz", "classical", "electronic", "hiphop", "country", "reggae", "blues", "metal",
+            "disco", "folk", "funk", "gospel", "latin", "soul", "techno", "trance", "world"
+        ];
     </script>
 </body>
 </html>
+
