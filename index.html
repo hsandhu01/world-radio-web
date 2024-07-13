@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Maeva's World Radio</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <h1>Maeva's World Radio</h1>
@@ -13,9 +13,11 @@
 
     <label for="genre">Genre:</label>
     <select id="genre" name="genre">
-        {% for genre in genres %}
-        <option value="{{ genre }}">{{ genre }}</option>
-        {% endfor %}
+        <option value="pop">pop</option>
+        <option value="rock">rock</option>
+        <option value="jazz">jazz</option>
+        <option value="classical">classical</option>
+        <!-- Add other genres as needed -->
     </select>
 
     <button onclick="updateStations()">Update Stations</button>
@@ -27,12 +29,13 @@
     <button onclick="stopStation()">Stop</button>
 
     <script>
+        const backendUrl = 'https://maevas-world-radio.herokuapp.com'; // Update with your Heroku URL
         let currentUrl = '';
 
         function updateStations() {
             const country = document.getElementById('country').value;
             const genre = document.getElementById('genre').value;
-            fetch(`/stations?country=${country}&genre=${genre}`)
+            fetch(`${backendUrl}/stations?country=${country}&genre=${genre}`)
                 .then(response => response.json())
                 .then(data => {
                     const stationsList = document.getElementById('stations');
@@ -48,7 +51,7 @@
 
         function playStation() {
             if (currentUrl) {
-                fetch('/play', {
+                fetch(`${backendUrl}/play`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -59,7 +62,7 @@
         }
 
         function stopStation() {
-            fetch('/stop', { method: 'POST' });
+            fetch(`${backendUrl}/stop`, { method: 'POST' });
         }
     </script>
 </body>
