@@ -71,6 +71,7 @@
     <script>
         const backendUrl = 'https://maevas-world-radio.herokuapp.com'; // Update with your Heroku URL
         let currentUrl = '';
+        let stationUrls = {};
         let favorites = {};
 
         function updateStations() {
@@ -86,7 +87,11 @@
                         li.textContent = station.name;
                         li.onclick = () => { currentUrl = station.url_resolved; };
                         stationsList.appendChild(li);
+                        stationUrls[station.name] = station.url_resolved;
                     });
+                })
+                .catch(error => {
+                    console.error('Error fetching stations:', error);
                 });
         }
 
@@ -98,19 +103,24 @@
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({ url: currentUrl })
+                }).catch(error => {
+                    console.error('Error playing station:', error);
                 });
             }
         }
 
         function stopStation() {
-            fetch(`${backendUrl}/stop`, { method: 'POST' });
+            fetch(`${backendUrl}/stop`, { method: 'POST' })
+                .catch(error => {
+                    console.error('Error stopping station:', error);
+                });
         }
 
         function addToFavorites() {
             const stationsList = document.getElementById('stations');
             const selectedStation = Array.from(stationsList.children).find(li => li.style.backgroundColor === 'gray');
             if (selectedStation && !favorites[selectedStation.textContent]) {
-                favorites[selectedStation.textContent] = currentUrl;
+                favorites[selectedStation.textContent] = stationUrls[selectedStation.textContent];
                 updateFavoritesList();
             }
         }
@@ -133,17 +143,6 @@
             }
         });
 
-        // Pre-populate genres
-        document.addEventListener('DOMContentLoaded', function() {
-            const genreSelect = document.getElementById('genre');
-            COMMON_GENRES.forEach(genre => {
-                const option = document.createElement('option');
-                option.value = genre;
-                option.text = genre;
-                genreSelect.add(option);
-            });
-        });
-
         const COMMON_GENRES = [
             "pop", "rock", "jazz", "classical", "electronic", "hiphop", "country", "reggae", "blues", "metal",
             "disco", "folk", "funk", "gospel", "latin", "soul", "techno", "trance", "world"
@@ -151,4 +150,5 @@
     </script>
 </body>
 </html>
+
 
